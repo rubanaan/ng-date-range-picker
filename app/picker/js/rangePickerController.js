@@ -178,25 +178,6 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
             }
         }
 
-        /*
-        function startTimeSelected (time)
-        {
-            self.startDate.hour(time.hour()).minute(time.minute());
-
-            setNextView();
-        }
-
-        function endTimeSelected (time)
-        {
-            self.endDate.hour(time.hour()).minute(time.minute());
-
-            if (self.closeOnSelect && self.mode === 'date-time')
-            {
-                changeDate(self.startDate, self.divider, self.endDate);
-            }
-        }
-        */
-
         /**
          * Sets the range.
          *
@@ -225,18 +206,10 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
 
             let range = {startDate: self.startDate, endDate: self.endDate};
 
-            if (!dateOnly)
-            {
-                self.selectedTabIndex = 0;
-                self.view             = "DATE";
+            self.selectedTabIndex = 0;
+            self.view             = "DATE";
 
-                pickerService.executeCallback('rangePicker:close', range);
-            }
-            else
-            {
-                pickerService.executeCallback('rangePicker:init', range);
-            }
-
+            pickerService.executeCallback('rangePicker:close', range);
             pickerService.executeCallback('calendar:changeDate', range);
 
             checkListActive();

@@ -8,7 +8,8 @@ testApp.controller('MainCtrl', ['$scope', '$timeout', '$mdSidenav', '$mdUtil', '
 
         $timeout(function ()
         {
-            self.endDate = moment().unix();
+            self.endDate   = moment().unix();
+            self.startDate = moment().unix();
         }, 1200);
 
         self.dayofPaySelected = function (range)
