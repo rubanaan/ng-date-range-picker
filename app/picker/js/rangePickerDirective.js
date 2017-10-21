@@ -5,21 +5,24 @@ function ()
         restrict: 'E',
         require:  ['^?ngModel', 'rangePicker'],
         scope: {
-            format:        '@',
-            divider:       '@',
-            weekStartDay:  "@",
-            customToHome:  "@",
-            closeOnSelect: "@",
-            mode:          "@",
-            showCustom:    '@',
-            customList:    '=',
-            minDate:       '@',
-            maxDate:       '@'
+            customId: '@',
+            format: '@',
+            divider: '@',
+            weekStartDay: '@',
+            customToHome: '@',
+            closeOnSelect: '@',
+            mode: '@',
+            showCustom: '@',
+            customList: '=',
+            minDate: '@',
+            maxDate: '@',
+            startDate: '@',
+            endDate: '@'
         },
         terminal:         true,
         controller:       'rangePickerController',
         controllerAs:     'vm',
-        bindToController: true,
+        bindToController: false,
         templateUrl:      'picker/range-picker.html'
     }
 });

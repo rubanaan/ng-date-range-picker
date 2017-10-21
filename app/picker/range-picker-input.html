@@ -5,17 +5,21 @@
            type="text"
            aria-label="{{ vm.fname }}"
            ng-required="{{ vm.isRequired }}"
+           ng-disabled="{{ vm.disabled }}"
            class="sm-input-container"
            ng-focus="vm.show()"
            placeholder="{{ vm.label }}">
 
     <div id="picker" class="sm-calender-pane md-whiteframe-4dp" ng-model="value">
         <range-picker ng-model="vm.value"
+                      custom-id="{{ vm.customId }}"
                       custom-to-home="{{ vm.customToHome }}"
                       custom-list="vm.customList"
                       mode="{{ vm.mode }}"
                       min-date="{{ vm.minDate }}"
                       max-date="{{ vm.maxDate }}"
+                      start-date="{{ startDate }}"
+                      end-date="{{ endDate }}"
                       close-on-select="{{ vm.closeOnSelect }}"
                       show-custom="{{ vm.showCustom }}"
                       week-start-day="{{ vm.weekStartDay }}"

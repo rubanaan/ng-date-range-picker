@@ -5,6 +5,8 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
         var self = this;
 
         //-- public variables
+        self.customId = $scope.customId;
+
         self.dayHeader     = pickerProvider.dayHeader;
         self.initialDate   = $scope.initialDate;
         self.viewModeSmall = $mdMedia('xs');
@@ -34,7 +36,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
         self.currentDate = self.initialDate ? self.initialDate.clone() : null;
         self.initialDate = self.initialDate ? self.initialDate.clone() : moment();
 
-        self.startDate   = self.currentDate || pickerService.startDate.clone();
+        self.startDate   = self.currentDate || pickerProvider.startDate.clone();
 
         //-- public methods
         self.setInitDate = setInitDate;
@@ -69,7 +71,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
 
             if (self.rangePickType === 'startDate')
             {
-                pickerService.registerCallback('calendar:changeDate', function (date)
+                pickerService.registerCallback(self.customId + ':calendar:changeDate', function (date)
                 {
                     self.initialDate = date.startDate.clone();
                     self.startDate   = date.startDate.clone();
@@ -79,7 +81,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
                     changeActiveState();
                 });
 
-                self.endDate = pickerService.startDate ? pickerService.endDate.clone() : null;
+                self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
             }
             else if (self.rangePickType === 'endDate')
             {
@@ -332,7 +334,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
                 self.view = 'DATE';
             }
 
-            pickerService.executeCallback('calendar:close');
+            pickerService.executeCallback(self.customId + ':calendar:close');
         }
 
         function closeDateTime ()
@@ -346,7 +348,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
                 self.view = 'DATE';
             }
 
-            pickerService.executeCallback('calendar:close');
+            pickerService.executeCallback(self.customId + ':calendar:close');
         }
 
 
@@ -379,13 +381,13 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
                 self.startDate = date;
                 self.endDate = null;
 
-                pickerService.executeCallback('rangePicker:startDateSelected', date);
+                pickerService.executeCallback(self.customId + ':rangePicker:startDateSelected', date);
             }
             else if (self.rangePickType && self.rangePickType === 'endDate')
             {
                 self.endDate = date;
 
-                pickerService.executeCallback('rangePicker:endDateSelected', date);
+                pickerService.executeCallback(self.customId + ':rangePicker:endDateSelected', date);
             }
             else
             {

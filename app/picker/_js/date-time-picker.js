@@ -42,7 +42,7 @@ function DateTimePicker($mdUtil, $mdMedia, $document, picker) {
                     inputType +
                   '     <div id="picker" class="sm-calender-pane md-whiteframe-z1 hide-animate">' +
                   '          <sm-date-picker ' +
-                  '              id="{{vm.fname}}Picker" ' +
+                  '              id="{{vm.fname}}" ' +
                   '              initial-date="vm.value"' +
                   '              mode="{{vm.mode}}" ' +
                   '              disable-year-selection={{vm.disableYearSelection}}' +

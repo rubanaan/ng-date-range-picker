@@ -5,15 +5,20 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
         var self = this;
 
         //-- public variables
+        self.customId = $scope.customId;
+
         self.clickedButton           = 0;
         self.startShowCustomSettting = self.showCustom;
 
-        self.startDate               = pickerProvider.startDate || pickerProvider.rangeDefaultList[0].startDate;
-        self.endDate                 = pickerProvider.endDate || pickerProvider.rangeDefaultList[0].endDate;
+        self.startDate               = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
+        self.endDate                 = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
 
         self.initialDate             = self.startDate;
 
-        self.divider                 = angular.isUndefined($scope.divider) || $scope.divider === '' ? pickerProvider.rangeDivider : $scope.divider;
+        self.closeOnSelect           = !!$scope.closeOnSelect === true;
+        self.mode                    = angular.isUndefined($scope.mode) ? 'date' : $scope.mode;
+        self.format                  = angular.isUndefined($scope.format) ? 'DD/MM/YYYY' : $scope.format;
+        self.divider                 = $scope.divider || '-';
 
         self.okLabel                 = pickerProvider.okLabel;
         self.cancelLabel             = pickerProvider.cancelLabel;
@@ -35,10 +40,8 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
         self.cancel   = cancel;
 
         //-- callbacks
-        pickerService.registerCallback('rangePicker:startDateSelected', startDateSelected);
-        pickerService.registerCallback('rangePicker:endDateSelected', endDateSelected);
-
-        pickerService.registerCallback('rangePicker:changeDate', changeDate);
+        pickerService.registerCallback(self.customId + ':rangePicker:startDateSelected', startDateSelected);
+        pickerService.registerCallback(self.customId + ':rangePicker:endDateSelected', endDateSelected);
 
 
         return init();
@@ -48,12 +51,28 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
          */
         function init ()
         {
-            pickerService.startDate = self.startDate;
-            pickerService.endDate   = self.endDate;
+            $scope.$watch('startDate', function (value)
+            {
+                startDateSelected(value);
+            });
+
+            $scope.$watch('endDate', function (value)
+            {
+                endDateSelected(value);
+            });
+
+            /*
+            $scope.$watchGroup(['startDate', 'endDate'], function(newValues, oldValues, scope)
+            {
+                self.startDate = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
+                self.endDate   = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
+
+                changeDate(self.startDate, self.endDate);
+            });
+            */
+
 
             checkListActive();
-
-            pickerService.executeCallback('rangePicker:init', {startDate: self.startDate, endDate: self.endDate});
         }
 
         /**
@@ -74,6 +93,7 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
                 {
                     continue;
                 }
+
 
                 self.rangeDefaultList[i].active = false;
 
@@ -154,7 +174,7 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
          */
         function startDateSelected (date)
         {
-            self.startDate = date;
+            self.startDate = pickerService.getDate(date);
 
             setNextView();
         }
@@ -166,7 +186,7 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
          */
         function endDateSelected (date)
         {
-            self.endDate = date;
+            self.endDate = pickerService.getDate(date);
 
             if (self.closeOnSelect && self.mode === 'date')
             {
@@ -197,20 +217,16 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
          *
          * @param startDate
          * @param endDate
-         * @param dateOnly
          */
-        function changeDate (startDate, endDate, dateOnly)
+        function changeDate (startDate, endDate)
         {
-            self.startDate = startDate || pickerProvider.startDate;
-            self.endDate   = endDate   || pickerProvider.endDate;
-
-            let range = {startDate: self.startDate, endDate: self.endDate};
+            let range = {startDate: startDate, endDate: endDate};
 
             self.selectedTabIndex = 0;
             self.view             = "DATE";
 
-            pickerService.executeCallback('rangePicker:close', range);
-            pickerService.executeCallback('calendar:changeDate', range);
+            pickerService.executeCallback(self.customId + ':rangePicker:close', range);
+            pickerService.executeCallback(self.customId + ':calendar:changeDate', range);
 
             checkListActive();
         }
@@ -223,7 +239,7 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
             self.selectedTabIndex = 0;
             self.showCustom       = false;
 
-            pickerService.executeCallback('rangePicker:close');
+            pickerService.executeCallback(self.customId + ':rangePicker:close');
         }
     }
 ]);

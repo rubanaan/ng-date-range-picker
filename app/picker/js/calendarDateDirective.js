@@ -6,6 +6,7 @@ function ()
         replace:  false,
         require:  ['^ngModel', 'calendarDate'],
         scope: {
+            customId:             '@',
             rangePickType:        '@',
             minDate:              "=",
             maxDate:              "=",
@@ -14,7 +15,7 @@ function ()
             mode:                 '@',
             startView:            '@',
             weekStartDay:         '@',
-            disableYearSelection: '@'
+            disableYearSelection: '@',
         },
         controller:   'calendarDateController',
         controllerAs: 'vm',

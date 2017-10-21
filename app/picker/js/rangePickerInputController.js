@@ -1,5 +1,5 @@
-picker.controller('rangePickerInputController', ['$scope', '$element', '$mdUtil', '$mdMedia', '$document', 'pickerService', 'pickerProvider',
-function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerProvider)
+picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element', '$mdUtil', '$mdMedia', '$document', 'pickerService', 'pickerProvider',
+function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerService, pickerProvider)
 {
     //-- private variables
     var self = this;
@@ -10,6 +10,8 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
     self.calenderHeight = 460;
     self.calenderWidth  = 296;
 
+    self.customId = $scope.customId || 'one';
+
     self.inputPane      = $element[0].querySelector('.sm-input-container');
     self.calenderPane   = $element[0].querySelector('.sm-calender-pane');
     self.button         = $element[0].querySelector('.sm-picker-icon');
@@ -19,6 +21,12 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
     self.mode           = angular.isUndefined($scope.mode) ? 'date' : $scope.mode;
     self.format         = angular.isUndefined($scope.format) ? 'DD/MM/YYYY' : $scope.format;
     self.divider        = $scope.divider || '-';
+
+    self.disabled       = $scope.disabled;
+
+    self.startDate = $scope.startDate;
+    self.endDate   = $scope.endDate;
+
 
     self.onRangeSelect  = angular.isFunction($scope.onRangeSelect) ? $scope.onRangeSelect : false;
 
@@ -36,8 +44,7 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
     self.clickOutSideHandler = clickOutSideHandler;
 
     //-- callbacks
-    pickerService.registerCallback('rangePicker:init', initInput);
-    pickerService.registerCallback('rangePicker:close', closePicker);
+    pickerService.registerCallback(self.customId + ':rangePicker:close', closePicker);
 
 
     return init();
@@ -48,15 +55,12 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
      */
     function init ()
     {
-        $scope.$watch('startDate', function (newDate)
+        $scope.$watchGroup(['startDate', 'endDate'], function(newValues, oldValues, scope)
         {
-            pickerProvider.startDate = getDate(newDate);
-            pickerService.executeCallback('rangePicker:changeDate', null, null, true);
-        });
-        $scope.$watch('endDate', function (newDate)
-        {
-            pickerProvider.endDate = getDate(newDate);
-            pickerService.executeCallback('rangePicker:changeDate', null, null, true);
+            let startDate = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
+            let endDate   = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
+
+            initInput({startDate: startDate, endDate: endDate});
         });
 
         if (self.customList)
@@ -80,31 +84,6 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
                     break;
             }
         });
-    }
-
-    /**
-     * Sets the end date.
-     *
-     * @param date
-     */
-    function getDate (date)
-    {
-        if (!date)
-        {
-            return null;
-        }
-
-        if (!moment.isMoment(date))
-        {
-            date = moment.unix(date);
-        }
-
-        if (moment.isMoment(date))
-        {
-            return date;
-        }
-
-        return null;
     }
 
     /**
@@ -217,14 +196,17 @@ function ($scope, $element, $mdUtil, $mdMedia, $document, pickerService, pickerP
      */
     function closePicker (date)
     {
-        self.value = date.startDate.format(self.format) + ' ' + self.divider + ' ' + date.endDate.format(self.format);
+        let startDate = date.startDate ? pickerService.getDate(date.startDate) : pickerProvider.startDate;
+        let endDate   = date.endDate ? pickerService.getDate(date.endDate) : pickerProvider.endDate;
+
+        self.value = startDate.format(self.format) + ' ' + self.divider + ' ' + endDate.format(self.format);
 
         $document.off('keydown');
         hideElement();
 
         if (angular.isFunction(self.onRangeSelect))
         {
-            self.onRangeSelect({range: date});
+            self.onRangeSelect({range: {startDate: startDate, endDate: endDate}});
         }
     }
 

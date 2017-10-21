@@ -6,6 +6,10 @@ testApp.controller('MainCtrl', ['$scope', '$timeout', '$mdSidenav', '$mdUtil', '
         self.startDate = moment().startOf('month').unix();
         self.endDate   = moment().endOf('month').unix();
 
+        self.test = false;
+
+        self.test = true;
+
         $timeout(function ()
         {
             self.endDate   = moment().unix();

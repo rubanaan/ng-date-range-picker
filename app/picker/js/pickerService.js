@@ -8,6 +8,7 @@ function()
     //-- public methods
     self.registerCallback = registerCallback;
     self.executeCallback  = executeCallback;
+    self.getDate          = getDate;
 
     /**
      * Sets a callback.
@@ -35,5 +36,30 @@ function()
 
             callbacks[name].apply(null, args);
         }
+    }
+
+    /**
+     *
+     * @param date
+     * @returns {*}
+     */
+    function getDate (date)
+    {
+        if (!date)
+        {
+            return null;
+        }
+
+        if (moment.isMoment(date))
+        {
+            return date;
+        }
+
+        if (!moment.isMoment(date))
+        {
+            return moment.unix(date);
+        }
+
+        return null;
     }
 });

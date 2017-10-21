@@ -29,6 +29,7 @@
             <div ng-show="vm.selectedTabIndex === 0">
                 <calendar-date ng-show="vm.view === 'DATE'"
                                range-pick-type="startDate"
+                               custom-id="{{ vm.customId }}"
                                initial-date="vm.initialDate"
                                min-date="vm.minDate"
                                max-date="vm.maxDate"
@@ -44,6 +45,7 @@
             <div ng-if="vm.selectedTabIndex === 1">
                 <calendar-date ng-show="vm.view === 'DATE'"
                                range-pick-type="endDate"
+                               custom-id="{{ vm.customId }}"
                                initial-date="vm.startDate"
                                min-date="vm.startDate"
                                max-date="vm.maxDate"
