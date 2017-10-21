@@ -1,0 +1,12 @@
+<form name="test" ng-submit="vm.save()" novalidate layout="column" flex>
+    <h2 class="md-title">Demo For Default Date Range Picker</h2>
+    <div layout="row">
+        <range-picker-input md-no-float class="md-block"
+                            ng-model="vm.employee.default"
+                            on-range-select="vm.dayofPaySelected(range)"
+                            start-date="{{ vm.startDate }}"
+                            end-date="{{ vm.endDate }}"
+                            label="Data">
+        </range-picker-input>
+    </div>
+</form>
