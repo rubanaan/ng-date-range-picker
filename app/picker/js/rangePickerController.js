@@ -1,6 +1,7 @@
-picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerProvider',
-    function ($scope, pickerService, pickerProvider)
+picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService', 'pickerProvider',
+    function ($scope, $timeout, pickerService, pickerProvider)
     {
+
         //-- private variables
         var self = this;
 
@@ -53,11 +54,21 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
         {
             $scope.$watch('startDate', function (value)
             {
+                if (!value)
+                {
+                    return;
+                }
+
                 startDateSelected(value);
             });
 
             $scope.$watch('endDate', function (value)
             {
+                if (!value)
+                {
+                    return;
+                }
+
                 endDateSelected(value);
             });
 
@@ -73,6 +84,12 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
 
 
             checkListActive();
+
+            $timeout(function ()
+            {
+                changeDate(self.startDate, self.endDate);
+
+            });
         }
 
         /**

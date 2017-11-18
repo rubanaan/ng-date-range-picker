@@ -73,15 +73,15 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
             {
                 pickerService.registerCallback(self.customId + ':calendar:changeDate', function (date)
                 {
-                    self.initialDate = date.startDate.clone();
-                    self.startDate   = date.startDate.clone();
-                    self.endDate     = date.endDate.clone();
+                    self.initialDate = date.startDate ? date.startDate.clone() : moment();
+                    self.startDate   = date.startDate ? date.startDate.clone() : pickerProvider.startDate.clone();
+                    self.endDate     = date.endDate ? date.endDate.clone() : pickerProvider.endDate.clone();
 
                     buildDateCells();
                     changeActiveState();
                 });
 
-                self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
+                //self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
             }
             else if (self.rangePickType === 'endDate')
             {

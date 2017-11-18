@@ -316,15 +316,15 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
             {
                 pickerService.registerCallback(self.customId + ':calendar:changeDate', function (date)
                 {
-                    self.initialDate = date.startDate.clone();
-                    self.startDate   = date.startDate.clone();
-                    self.endDate     = date.endDate.clone();
+                    self.initialDate = date.startDate ? date.startDate.clone() : moment();
+                    self.startDate   = date.startDate ? date.startDate.clone() : pickerProvider.startDate.clone();
+                    self.endDate     = date.endDate ? date.endDate.clone() : pickerProvider.endDate.clone();
 
                     buildDateCells();
                     changeActiveState();
                 });
 
-                self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
+                //self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
             }
             else if (self.rangePickType === 'endDate')
             {
@@ -732,9 +732,10 @@ function ()
         templateUrl:  "picker/calender-date.html"
     }
 });
-picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerProvider',
-    function ($scope, pickerService, pickerProvider)
+picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService', 'pickerProvider',
+    function ($scope, $timeout, pickerService, pickerProvider)
     {
+
         //-- private variables
         var self = this;
 
@@ -787,11 +788,21 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
         {
             $scope.$watch('startDate', function (value)
             {
+                if (!value)
+                {
+                    return;
+                }
+
                 startDateSelected(value);
             });
 
             $scope.$watch('endDate', function (value)
             {
+                if (!value)
+                {
+                    return;
+                }
+
                 endDateSelected(value);
             });
 
@@ -807,6 +818,12 @@ picker.controller('rangePickerController', ['$scope', 'pickerService', 'pickerPr
 
 
             checkListActive();
+
+            $timeout(function ()
+            {
+                changeDate(self.startDate, self.endDate);
+
+            });
         }
 
         /**
