@@ -59,7 +59,8 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
                     return;
                 }
 
-                startDateSelected(value);
+                self.startDate = pickerService.getDate(value);
+                changeDate(self.startDate, self.endDate, false);
             });
 
             $scope.$watch('endDate', function (value)
@@ -69,19 +70,9 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
                     return;
                 }
 
-                endDateSelected(value);
+                self.endDate = pickerService.getDate(value);
+                changeDate(self.startDate, self.endDate, false);
             });
-
-            /*
-            $scope.$watchGroup(['startDate', 'endDate'], function(newValues, oldValues, scope)
-            {
-                self.startDate = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
-                self.endDate   = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
-
-                changeDate(self.startDate, self.endDate);
-            });
-            */
-
 
             checkListActive();
 
@@ -199,14 +190,15 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
          * On end date selected.
          *
          * @param date
+         * @param update
          */
-        function endDateSelected (date)
+        function endDateSelected (date, update)
         {
             self.endDate = pickerService.getDate(date);
 
             if (self.closeOnSelect && self.mode === 'date')
             {
-                changeDate(self.startDate, self.endDate);
+                changeDate(self.startDate, self.endDate, update);
             }
             else
             {

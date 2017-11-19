@@ -187,6 +187,14 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
         $document.off('click');
 
         self.isCalenderOpen = false;
+
+        $timeout(function ()
+        {
+            if (self.isCalenderOpen === false)
+            {
+                self.calenderPane.parentNode.removeChild(self.calenderPane);
+            }
+        }, 1000);
     }
 
     /**
