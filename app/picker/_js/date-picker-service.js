@@ -17,7 +17,6 @@ function DatePickerServiceCtrl($scope, $mdDialog, $mdMedia, $timeout,$mdUtil,pic
         self.closeOnSelect =isExist(self.options.closeOnSelect,false);
     }
 
-    console.log(self.format);
     if(!angular.isObject(self.initialDate)){
         self.initialDate = moment(self.initialDate,self.format);
         self.selectedDate = self.initialDate;                  

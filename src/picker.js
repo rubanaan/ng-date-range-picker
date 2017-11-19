@@ -821,8 +821,7 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
 
             $timeout(function ()
             {
-                changeDate(self.startDate, self.endDate);
-
+                changeDate(self.startDate, self.endDate, false);
             });
         }
 
@@ -968,15 +967,19 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
          *
          * @param startDate
          * @param endDate
+         * @param update
          */
-        function changeDate (startDate, endDate)
+        function changeDate (startDate, endDate, update)
         {
             let range = {startDate: startDate, endDate: endDate};
 
             self.selectedTabIndex = 0;
             self.view             = "DATE";
 
-            pickerService.executeCallback(self.customId + ':rangePicker:close', range);
+            if (angular.isUndefined(update) || update === true)
+            {
+                pickerService.executeCallback(self.customId + ':rangePicker:close', range);
+            }
             pickerService.executeCallback(self.customId + ':calendar:changeDate', range);
 
             checkListActive();
