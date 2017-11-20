@@ -1,6 +1,6 @@
 {
     "name": "ng-date-range-picker",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Date range picker",
     "main": "./src/picker.js",
     "scripts": {

@@ -1211,7 +1211,10 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
         {
             if (self.isCalenderOpen === false)
             {
-                self.calenderPane.parentNode.removeChild(self.calenderPane);
+                if (self.calenderPane.parentNode)
+                {
+                    self.calenderPane.parentNode.removeChild(self.calenderPane);
+                }
             }
         }, 1000);
     }
