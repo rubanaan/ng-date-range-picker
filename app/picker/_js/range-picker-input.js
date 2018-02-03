@@ -41,9 +41,9 @@
     }
 
 
-    var SMRangePickerCtrl = function ($scope, $element, $mdUtil, $mdMedia, $document)
+    let SMRangePickerCtrl = function ($scope, $element, $mdUtil, $mdMedia, $document)
     {
-        var self = this;
+        let self = this;
         self.$scope = $scope;
         self.$element = $element;
         self.$mdUtil = $mdUtil;
@@ -75,7 +75,10 @@
 
         self.$scope.$on('$destroy', function ()
         {
-            self.calenderPane.parentNode.removeChild(self.calenderPane);
+            if (self.calenderPane.parentNode)
+            {
+                self.calenderPane.parentNode.removeChild(self.calenderPane);
+            }
         });
 
         // if tab out hide key board

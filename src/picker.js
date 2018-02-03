@@ -1089,7 +1089,10 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
 
         $scope.$on('$destroy', function ()
         {
-            self.calenderPane.parentNode.removeChild(self.calenderPane);
+            if (self.calenderPane.parentNode)
+            {
+                self.calenderPane.parentNode.removeChild(self.calenderPane);
+            }
         });
 
         // if tab out hide key board
@@ -1149,8 +1152,8 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
      */
     function show ($event)
     {
-        var elementRect = self.inputPane.getBoundingClientRect();
-        var bodyRect    = document.body.getBoundingClientRect();
+        let elementRect = self.inputPane.getBoundingClientRect();
+        let bodyRect    = document.body.getBoundingClientRect();
 
         self.calenderPan.removeClass('hide hide-animate');
 
@@ -1161,7 +1164,7 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
         }
         else
         {
-            var rect = getVisibleViewPort(elementRect, bodyRect);
+            let rect = getVisibleViewPort(elementRect, bodyRect);
             self.calenderPane.style.left = (rect.left) + 'px';
             self.calenderPane.style.top  = (rect.top) + 'px';
         }
@@ -1216,7 +1219,7 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
                     self.calenderPane.parentNode.removeChild(self.calenderPane);
                 }
             }
-        }, 1000);
+        });
     }
 
     /**
