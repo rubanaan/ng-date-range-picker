@@ -157,7 +157,10 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
         $mdUtil.disableScrollAround(self.calenderPane);
 
         self.isCalenderOpen = true;
-        $document.on('click', self.bodyClickHandler);
+        $timeout(function ()
+        {
+            $document.on('click', self.bodyClickHandler);
+        }, 200);
     }
 
     /**
@@ -180,6 +183,7 @@ function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerServic
     {
         self.calenderPan.addClass('hide-animate');
         self.calenderPan.removeClass('show');
+
         $mdUtil.enableScrolling();
 
         if (self.button)
