@@ -1,6 +1,4 @@
 (function(){
-  'use strict';
-
   angular.module('demoApp')
     .run(['$templateCache', function ($templateCache) {
       $templateCache.put('partials/menu-link.tmpl.html',

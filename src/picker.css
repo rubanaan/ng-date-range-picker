@@ -3,9 +3,11 @@
   padding-right: 20px;
 }
 .slideLeft {
+  -webkit-animation: slideInLeft 500ms cubic-bezier(0.06, 0.61, 0.04, 1.03);
   animation: slideInLeft 500ms cubic-bezier(0.06, 0.61, 0.04, 1.03);
 }
 .slideRight {
+  -webkit-animation: slideInRight 500ms cubic-bezier(0.06, 0.61, 0.04, 1.03);
   animation: slideInRight 500ms cubic-bezier(0.06, 0.61, 0.04, 1.03);
 }
 .sm-calender-pane {
@@ -16,17 +18,11 @@
   border-radius: 2px;
 }
 .sm-calender-pane.hide-animate {
-  -webkit-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-  -moz-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-  -o-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   max-height: 0;
   max-width: 0;
 }
 .sm-calender-pane.show {
-  -webkit-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-  -moz-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-  -o-transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   transition: all 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   max-height: 500px;
   max-width: 450px;
@@ -44,14 +40,10 @@
   }
   .sm-calender-pane.hide {
     -webkit-animation: scaleDownCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-    -moz-animation: scaleDownCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-    -o-animation: scaleDownCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
     animation: scaleDownCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   }
   .sm-calender-pane.show {
     -webkit-animation: scaleUpCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-    -moz-animation: scaleUpCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
-    -o-animation: scaleUpCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
     animation: scaleUpCal 1s cubic-bezier(0.04, 1.01, 0.13, 1.02);
   }
   .sm-calender-pane .action {
@@ -117,6 +109,7 @@
 }
 .date-picker .year-container {
   width: 300px;
+  -webkit-animation: slideInDown 1s cubic-bezier(0.06, 0.61, 0.04, 1.03);
   animation: slideInDown 1s cubic-bezier(0.06, 0.61, 0.04, 1.03);
   margin-top: 20px;
 }
@@ -282,7 +275,7 @@
   background-color: #ffffff;
 }
 .range-picker .md-toolbar-tools {
-  font-size: calc(15px);
+  font-size: calc(13px + 2);
 }
 .range-picker .md-toolbar-tools .date-display {
   width: 130px;
@@ -334,7 +327,7 @@
   position: absolute;
   border-bottom: 2px solid #ff5252;
   transition-property: all;
-  transition-duration: .5s;
+  transition-duration: 0.5s;
   transition-timing-function: cubic-bezier(0.06, 0.61, 0.04, 1.03);
 }
 .range-picker .custom-select.show-calender > .tab-head div.ink-bar.moveLeft {
@@ -343,64 +336,118 @@
 .range-picker .custom-select.show-calender > .tab-head div.ink-bar.moveRight {
   left: 50%;
 }
-@keyframes slideInLeft {
+@-webkit-keyframes slideInLeft {
   from {
+    -webkit-transform: translate3d(-100%, 0, 0);
     transform: translate3d(-100%, 0, 0);
     visibility: visible;
   }
   100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slideInLeft {
+  from {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
 }
 .slideInLeft {
+  -webkit-animation-name: slideInLeft;
   animation-name: slideInLeft;
 }
-@keyframes slideInRight {
+@-webkit-keyframes slideInRight {
   from {
+    -webkit-transform: translate3d(100%, 0, 0);
     transform: translate3d(100%, 0, 0);
     visibility: visible;
   }
   100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slideInRight {
+  from {
+    -webkit-transform: translate3d(100%, 0, 0);
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
 }
 .slideInRight {
+  -webkit-animation-name: slideInRight;
   animation-name: slideInRight;
 }
-@keyframes slideInUp {
+@-webkit-keyframes slideInUp {
   from {
+    -webkit-transform: translate3d(0, 100%, 0);
     transform: translate3d(0, 100%, 0);
     visibility: visible;
   }
   100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slideInUp {
+  from {
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
 }
 .slideInUp {
+  -webkit-animation-name: slideInUp;
   animation-name: slideInUp;
 }
-@keyframes slideInDown {
+@-webkit-keyframes slideInDown {
   from {
+    -webkit-transform: translate3d(0, -100%, 0);
     transform: translate3d(0, -100%, 0);
     visibility: visible;
   }
   100% {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes slideInDown {
+  from {
+    -webkit-transform: translate3d(0, -100%, 0);
+    transform: translate3d(0, -100%, 0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translate3d(0, 0, 0);
     transform: translate3d(0, 0, 0);
   }
 }
 .slideInDown {
+  -webkit-animation-name: slideInDown;
   animation-name: slideInDown;
 }
 @-webkit-keyframes scaleUpCal {
   0% {
-    -ms-transform: scale(0.5, 0.5);
     /* IE 9 */
     -webkit-transform: scale(0.5, 0.5);
     /* Safari */
     transform: scale(0.5, 0.5);
   }
   100% {
-    -ms-transform: scale(1, 1);
     /* IE 9 */
     -webkit-transform: scale(1, 1);
     /* Safari */
@@ -410,14 +457,12 @@
 /* Standard syntax */
 @keyframes scaleUpCal {
   0% {
-    -ms-transform: scale(0.5, 0.5);
     /* IE 9 */
     -webkit-transform: scale(0.5, 0.5);
     /* Safari */
     transform: scale(0.5, 0.5);
   }
   100% {
-    -ms-transform: scale(1, 1);
     /* IE 9 */
     -webkit-transform: scale(1, 1);
     /* Safari */
@@ -426,14 +471,12 @@
 }
 @-webkit-keyframes scaleDownCal {
   0% {
-    -ms-transform: scale(1, 1);
     /* IE 9 */
     -webkit-transform: scale(1, 1);
     /* Safari */
     transform: scale(1, 1);
   }
   100% {
-    -ms-transform: scale(0.5, 0.5);
     /* IE 9 */
     -webkit-transform: scale(0.5, 0.5);
     /* Safari */
@@ -443,14 +486,12 @@
 /* Standard syntax */
 @keyframes scaleDownCal {
   0% {
-    -ms-transform: scale(1, 1);
     /* IE 9 */
     -webkit-transform: scale(1, 1);
     /* Safari */
     transform: scale(1, 1);
   }
   100% {
-    -ms-transform: scale(0.5, 0.5);
     /* IE 9 */
     -webkit-transform: scale(0.5, 0.5);
     /* Safari */
@@ -459,14 +500,12 @@
 }
 @-webkit-keyframes moveUp {
   0% {
-    -ms-transform: top;
     /* IE 9 */
     -webkit-transform: top;
     /* Safari */
     transform: top;
   }
   100% {
-    -ms-transform: top;
     /* IE 9 */
     -webkit-transform: top;
     /* Safari */
@@ -476,14 +515,12 @@
 /* Standard syntax */
 @keyframes moveUp {
   0% {
-    -ms-transform: top;
     /* IE 9 */
     -webkit-transform: top;
     /* Safari */
     transform: top;
   }
   100% {
-    -ms-transform: top;
     /* IE 9 */
     -webkit-transform: top;
     /* Safari */

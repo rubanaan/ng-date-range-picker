@@ -1,7 +1,5 @@
 (function ()
 {
-    'use strict';
-
     function MenuCtrl ($log, $state, $timeout, $location, $mdSidenav, menu)
     {
 

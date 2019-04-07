@@ -7,15 +7,22 @@ var gulp          = require('gulp'),
     rename        = require('gulp-rename'),
     addStream     = require('add-stream'),
 
-    uglify        = require('gulp-uglify'),
-
-    less          = require('gulp-less'),
-    cleanCSS      = require('gulp-clean-css'),
-
     htmlmin       = require('gulp-htmlmin'),
     templateCache = require('gulp-angular-templatecache'),
 
-    replaceName   = require('gulp-html-replace');
+    replaceName   = require('gulp-html-replace'),
+
+    autoprefixer  = require('autoprefixer'),
+
+    less          = require('gulp-less'),
+    postCSS       = require('gulp-postcss'),
+    cleanCSS      = require('gulp-clean-css'),
+
+    ngAnnotate    = require('gulp-ng-annotate'),
+    fsCache       = require('gulp-fs-cache'),
+    uglify        = require('gulp-uglify'),
+    replace       = require('gulp-replace'),
+    babel         = require('gulp-babel');
 
 gulp.task('minify-html', function ()
 {
@@ -116,12 +123,19 @@ function prepareTemplates ()
 
 gulp.task('pickerStyle', function ()
 {
-    gulp.src('app/styles/date_picker.less').pipe(less()).pipe(rename('picker.css')).pipe(gulp.dest('src/'));
+    gulp.src('app/styles/date_picker.less')
+        .pipe(less())
+        .pipe(postCSS([autoprefixer({cascade: false})]))
+        //.pipe(cleanCSS({keepSpecialComments: false}))
+        .pipe(rename('picker.css'))
+        .pipe(gulp.dest('src/'));
 });
 
 
 gulp.task('pickerJs', function ()
 {
+    let jsCache = fsCache('.gulp-cache/js');
+
     gulp.src([
         'app/picker/js/pickerProvider.js',
         'app/picker/js/pickerService.js',
@@ -134,12 +148,28 @@ gulp.task('pickerJs', function ()
 
         'app/picker/js/rangePickerInputController.js',
         'app/picker/js/rangePickerInputDirective.js',
-    ]).pipe(addStream.obj(prepareTemplates())).pipe(concat('picker.js')).pipe(gulp.dest('src/'));
+    ])
+        .pipe(addStream.obj(prepareTemplates()))
+        .pipe(concat('picker.js'))
+        .pipe(ngAnnotate({
+            add:           true,
+            single_quotes: true
+        }))
+        .pipe(replace(/["']ngInject["'];*/g, ''))
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
+        /*
+        .pipe(jsCache)
+        .pipe(uglify({mangle: true}).on('error', console.log))
+        .pipe(jsCache.restore)
+        */
+        .pipe(gulp.dest('src/'));
 });
 
 gulp.task('cleanSrc', function ()
 {
-    return clean(['src/']);
+    return clean(['src/*']);
 });
 
 //Watch task

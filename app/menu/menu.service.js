@@ -1,7 +1,5 @@
 (function(){
 
-  'use strict';
-
   angular.module('demoApp')
     .factory('menu', [
       '$location',
