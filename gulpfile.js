@@ -1,179 +1,116 @@
-var gulp          = require('gulp'),
+let gulp = require("gulp");
+let gulpClean = require("gulp-clean");
 
-    watch         = require('gulp-watch'),
-    clean         = require('del'),
+let gulpConcat = require("gulp-concat");
+let gulpRename = require("gulp-rename");
+let gulpAutoprefixer = require("autoprefixer");
 
-    concat        = require('gulp-concat'),
-    rename        = require('gulp-rename'),
-    addStream     = require('add-stream'),
+let gulpHtmlMin = require("gulp-htmlmin");
+let gulpTemplateCache = require("gulp-angular-templatecache");
 
-    htmlmin       = require('gulp-htmlmin'),
-    templateCache = require('gulp-angular-templatecache'),
+let gulpLess = require("gulp-less");
+let gulpPostCss = require("gulp-postcss");
+let gulpCleanCss = require("gulp-clean-css");
 
-    replaceName   = require('gulp-html-replace'),
+let gulpAnnotate = require("gulp-ng-annotate");
+let gulpUglify = require("gulp-uglify");
+let gulpReplace = require("gulp-replace");
+let gulpBabel = require("gulp-babel");
 
-    autoprefixer  = require('autoprefixer'),
-
-    less          = require('gulp-less'),
-    postCSS       = require('gulp-postcss'),
-    cleanCSS      = require('gulp-clean-css'),
-
-    ngAnnotate    = require('gulp-ng-annotate'),
-    fsCache       = require('gulp-fs-cache'),
-    uglify        = require('gulp-uglify'),
-    replace       = require('gulp-replace'),
-    babel         = require('gulp-babel');
-
-gulp.task('minify-html', function ()
-{
-    gulp.src('app/**/*.html').pipe(replaceName({
-        'css': ['styles/vendor.min.css', 'styles/picker.min.css'],
-        'js': ['scripts/vendor.min.js', 'scripts/script.min.js']
-    })).pipe(gulp.dest('dist/'));
-});
-
-gulp.task('scripts', function ()
-{
-    gulp.src([
-        'app/picker/js/pickerProvider.js',
-        'app/picker/js/pickerService.js',
-
-        'app/picker/js/calendarDateController.js',
-        'app/picker/js/calendarDateDirective.js',
-
-        'app/picker/js/rangePickerController.js',
-        'app/picker/js/rangePickerDirective.js',
-
-        'app/picker/js/rangePickerInputController.js',
-        'app/picker/js/rangePickerInputDirective.js',
-
-        'app/scripts/app.js',
-        'app/scripts/controllers/main.js'
-        //'app/menu/**/*.js'
-    ]).pipe(concat('script.min.js')).pipe(gulp.dest('dist/scripts/'));
-});
-
-gulp.task('styles', function ()
-{
-    gulp.src('app/styles/*.less').pipe(less()).pipe(concat('picker.min.css')).pipe(gulp.dest('dist/styles/'));
-});
-
-
-// build vendor js and styles
-gulp.task('vendorJs', function ()
-{
-    gulp.src([
-        'node_modules/angular/angular.js',
-        'node_modules/angular-animate/angular-animate.js',
-        'node_modules/angular-aria/angular-aria.js',
-        'node_modules/angular-messages/angular-messages.js',
-        'node_modules/angular-material/angular-material.js',
-        'node_modules/angular-ui-router/release/angular-ui-router.js',
-        'node_modules/moment/moment.js'
-    ]).pipe(uglify()).pipe(concat('vendor.min.js')).pipe(gulp.dest('dist/scripts/'));
-});
-
-
-gulp.task('vendorCss', function ()
-{
-    gulp.src([
-        'node_modules/angular-material/angular-material.css'
-    ]).pipe(cleanCSS({
-        keepSpecialComments: false
-    })).pipe(concat('vendor.min.css')).pipe(gulp.dest('dist/styles/'));
-});
-
-
-// watch task
-gulp.task('watch', ['minify-html', 'styles', 'scripts'], function ()
-{
-    gulp.watch('app/**/*.html', ['minify-html']);
-    gulp.watch('app/**/*.js', ['scripts']);
-    gulp.watch('app/styles/*.less', ['styles']);
-});
-
-// clean task
-gulp.task('clean', function ()
-{
-    return clean(['dist/**/*']);
-});
-
-
-/*
- buid task for distribution
- */
-function prepareTemplates ()
-{
-    return gulp.src([
-        'app/picker/calender-date.html',
-        'app/picker/range-picker.html',
-        'app/picker/range-picker-input.html'
+gulp.task("template", function () {
+  return gulp
+    .src([
+      "app/picker/calender-date.html",
+      "app/picker/range-picker.html",
+      "app/picker/range-picker-input.html",
     ])
-    .pipe(htmlmin({collapseWhitespace: true}))
-    .pipe(templateCache(
-        {
-            module: 'ngDateRangePicker',
-            transformUrl: function (url)
-            {
-                return 'picker/' + url;
-            }
-        }));
-}
-
-
-gulp.task('pickerStyle', function ()
-{
-    gulp.src('app/styles/date_picker.less')
-        .pipe(less())
-        .pipe(postCSS([autoprefixer({cascade: false})]))
-        //.pipe(cleanCSS({keepSpecialComments: false}))
-        .pipe(rename('picker.css'))
-        .pipe(gulp.dest('src/'));
+    .pipe(gulpHtmlMin({ collapseWhitespace: true }))
+    .pipe(
+      gulpTemplateCache({
+        filename: "template.js",
+        module: "ngDateRangePicker",
+        transformUrl: function (url) {
+          return "picker/" + url;
+        },
+      })
+    )
+    .pipe(gulp.dest("src/"));
 });
 
+gulp.task("style", function () {
+  return gulp
+    .src("app/styles/date_picker.less")
+    .pipe(gulpLess())
+    .pipe(gulpPostCss([gulpAutoprefixer({ cascade: false })]))
+    .pipe(gulpRename("picker.css"))
+    .pipe(gulp.dest("src/"));
+});
+gulp.task("minifyStyle", function () {
+  return gulp
+    .src("src/picker.css")
+    .pipe(gulpCleanCss({ keepSpecialComments: false }))
+    .pipe(gulpRename("picker.min.css"))
+    .pipe(gulp.dest("src/"));
+});
 
-gulp.task('pickerJs', function ()
-{
-    let jsCache = fsCache('.gulp-cache/js');
+gulp.task("javascript", function () {
+  return gulp
+    .src([
+      "app/picker/js/pickerProvider.js",
+      "app/picker/js/pickerService.js",
 
-    gulp.src([
-        'app/picker/js/pickerProvider.js',
-        'app/picker/js/pickerService.js',
+      "app/picker/js/calendarDateController.js",
+      "app/picker/js/calendarDateDirective.js",
 
-        'app/picker/js/calendarDateController.js',
-        'app/picker/js/calendarDateDirective.js',
+      "app/picker/js/rangePickerController.js",
+      "app/picker/js/rangePickerDirective.js",
 
-        'app/picker/js/rangePickerController.js',
-        'app/picker/js/rangePickerDirective.js',
+      "app/picker/js/rangePickerInputController.js",
+      "app/picker/js/rangePickerInputDirective.js",
 
-        'app/picker/js/rangePickerInputController.js',
-        'app/picker/js/rangePickerInputDirective.js',
+      "src/template.js",
     ])
-        .pipe(addStream.obj(prepareTemplates()))
-        .pipe(concat('picker.js'))
-        .pipe(ngAnnotate({
-            add:           true,
-            single_quotes: true
-        }))
-        .pipe(replace(/["']ngInject["'];*/g, ''))
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
-        /*
-        .pipe(jsCache)
-        .pipe(uglify({mangle: true}).on('error', console.log))
-        .pipe(jsCache.restore)
-        */
-        .pipe(gulp.dest('src/'));
+    .pipe(gulpConcat("picker.js"))
+    .pipe(
+      gulpAnnotate({
+        add: true,
+        single_quotes: true,
+      })
+    )
+    .pipe(gulpReplace(/["']ngInject["'];*/g, ""))
+    .pipe(
+      gulpBabel({
+        presets: ["@babel/env"],
+      })
+    )
+    .pipe(gulp.dest("src/"));
+});
+gulp.task("minifyJavascript", function () {
+  return gulp
+    .src("src/picker.js")
+    .pipe(gulpUglify({ mangle: true }))
+    .pipe(gulpRename("picker.min.js"))
+    .pipe(gulp.dest("src/"));
 });
 
-gulp.task('cleanSrc', function ()
-{
-    return clean(['src/*']);
+gulp.task("clean", function () {
+  return gulp.src("src/*", { read: false, allowEmpty: true }).pipe(gulpClean());
+});
+gulp.task("cleanTemplate", function () {
+  return gulp
+    .src("src/template.js", { read: false, allowEmpty: true })
+    .pipe(gulpClean());
 });
 
-//Watch task
-gulp.task('default', ['clean', 'minify-html', 'vendorCss', 'vendorJs', 'styles', 'scripts', 'watch']);
-
-gulp.task('build', ['cleanSrc', 'pickerJs', 'pickerStyle']);
- 
+gulp.task(
+  "build",
+  gulp.series(
+    "clean",
+    "template",
+    "javascript",
+    "style",
+    "cleanTemplate",
+    "minifyJavascript",
+    "minifyStyle"
+  )
+);
