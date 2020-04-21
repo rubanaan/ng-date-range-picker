@@ -30,7 +30,7 @@ gulp.task("template", function () {
         filename: "template.js",
         module: "ngDateRangePicker",
         transformUrl: function (url) {
-          return "picker/" + url;
+          return `picker${url}`;
         },
       })
     )
