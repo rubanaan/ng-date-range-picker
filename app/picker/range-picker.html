@@ -1,62 +1,90 @@
-<md-content layout="column" id="{{ id }}" class="range-picker md-whiteframe-2dp">
-    <md-toolbar layout="row" class="md-primary">
-        <div class="md-toolbar-tools" layout-align="space-around center">
-            <div class="date-display"><span>{{ vm.startDate.format(vm.format) }}</span></div>
-            <div class="date-display"><span>{{ vm.endDate.format(vm.format) }}</span></div>
-        </div>
-    </md-toolbar>
-
-    <div layout="row">
-        <div layout="column" class="pre-select" role="button">
-            <div layout="column" ng-repeat="list in vm.rangeDefaultList track by $index">
-                <md-button aria-label="{{ list.label }}"
-                           ng-if="list.label"
-                           ng-class="{'md-primary': list.active}"
-                           ng-click="list.startDate === 'custom' ? vm.showCustomView() : vm.setRange(list.startDate, list.endDate)">
-                    {{list.label}}
-                </md-button>
-                <md-divider ng-if="!list.label"></md-divider>
-            </div>
-        </div>
-
-        <div layout="column" class="custom-select show-calender">
-            <div layout="row" class="tab-head">
-                <span ng-class="{'active': vm.selectedTabIndex === 0}">{{ vm.rangeCustomStartEnd[0] }}</span>
-                <span ng-class="{'active': vm.selectedTabIndex === 1}">{{ vm.rangeCustomStartEnd[1] }}</span>
-                <div class="ink-bar" ng-class="{'moveLeft': vm.selectedTabIndex === 0, 'moveRight': vm.selectedTabIndex === 1}"></div>
-            </div>
-
-            <div ng-show="vm.selectedTabIndex === 0">
-                <calendar-date ng-show="vm.view === 'DATE'"
-                               range-pick-type="startDate"
-                               custom-id="{{ vm.customId }}"
-                               initial-date="vm.initialDate"
-                               min-date="vm.minDate"
-                               max-date="vm.maxDate"
-                               format="{{ format }}"
-                               week-start-day="{{ vm.weekStartDay }}">
-                </calendar-date>
-                <sm-time ng-show="vm.view === 'TIME'"
-                         ng-model="selectedStartTime"
-                         time-select-call="vm.startTimeSelected(time)">
-                </sm-time>
-            </div>
-
-            <div ng-if="vm.selectedTabIndex === 1">
-                <calendar-date ng-show="vm.view === 'DATE'"
-                               range-pick-type="endDate"
-                               custom-id="{{ vm.customId }}"
-                               initial-date="vm.startDate"
-                               min-date="vm.startDate"
-                               max-date="vm.maxDate"
-                               format="{{ format }}"
-                               week-start-day="{{ vm.weekStartDay }}">
-                </calendar-date>
-                <sm-time ng-show="vm.view === 'TIME'"
-                         ng-model="selectedEndTime"
-                         time-select-call="vm.endTimeSelected(time)">
-                </sm-time>
-            </div>
-        </div>
+<md-content
+  layout="column"
+  id="{{ id }}"
+  class="range-picker md-whiteframe-2dp"
+>
+  <md-toolbar layout="row" class="md-primary">
+    <div class="md-toolbar-tools" layout-align="space-around center">
+      <div class="date-display">
+        <span>{{ vm.startDate.format(vm.format) }}</span>
+      </div>
+      <div class="date-display">
+        <span>{{ vm.endDate.format(vm.format) }}</span>
+      </div>
     </div>
+  </md-toolbar>
+
+  <div layout="row">
+    <div layout="column" class="pre-select" role="button">
+      <div
+        layout="column"
+        ng-repeat="list in vm.rangeDefaultList track by $index"
+      >
+        <md-button
+          aria-label="{{ list.label }}"
+          ng-if="list.label"
+          ng-class="{'md-primary': list.active}"
+          ng-click="list.startDate === 'custom' ? vm.showCustomView() : vm.setRange(list.startDate, list.endDate)"
+        >
+          {{list.label}}
+        </md-button>
+        <md-divider ng-if="!list.label"></md-divider>
+      </div>
+    </div>
+
+    <div layout="column" class="custom-select show-calender">
+      <div layout="row" class="tab-head">
+        <span ng-class="{'active': vm.selectedTabIndex === 0}"
+          >{{ vm.rangeCustomStartEnd[0] }}</span
+        >
+        <span ng-class="{'active': vm.selectedTabIndex === 1}"
+          >{{ vm.rangeCustomStartEnd[1] }}</span
+        >
+        <div
+          class="ink-bar"
+          ng-class="{'moveLeft': vm.selectedTabIndex === 0, 'moveRight': vm.selectedTabIndex === 1}"
+        ></div>
+      </div>
+
+      <div ng-show="vm.selectedTabIndex === 0">
+        <calendar-date
+          ng-show="vm.view === 'DATE'"
+          range-pick-type="startDate"
+          custom-id="{{ vm.customId }}"
+          initial-date="vm.initialDate"
+          min-date="vm.minDate"
+          max-date="vm.maxDate"
+          format="{{ format }}"
+          week-start-day="{{ vm.weekStartDay }}"
+        >
+        </calendar-date>
+        <sm-time
+          ng-show="vm.view === 'TIME'"
+          ng-model="selectedStartTime"
+          time-select-call="vm.startTimeSelected(time)"
+        >
+        </sm-time>
+      </div>
+
+      <div ng-if="vm.selectedTabIndex === 1">
+        <calendar-date
+          ng-show="vm.view === 'DATE'"
+          range-pick-type="endDate"
+          custom-id="{{ vm.customId }}"
+          initial-date="vm.startDate"
+          min-date="vm.startDate"
+          max-date="vm.maxDate"
+          format="{{ format }}"
+          week-start-day="{{ vm.weekStartDay }}"
+        >
+        </calendar-date>
+        <sm-time
+          ng-show="vm.view === 'TIME'"
+          ng-model="selectedEndTime"
+          time-select-call="vm.endTimeSelected(time)"
+        >
+        </sm-time>
+      </div>
+    </div>
+  </div>
 </md-content>

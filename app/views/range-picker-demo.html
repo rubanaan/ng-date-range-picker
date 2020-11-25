@@ -1,18 +1,19 @@
 <form name="test" ng-submit="vm.save()" novalidate layout="column" flex>
-    <h2 class="md-title">Demo For Default Date Range Picker</h2>
-    <div layout="row">
-        <sm-range-picker-input
-                fname="Date of Pay"
-                label="Date of Pay"
-                close-on-select="true"
-                form="test"
-                ng-model="vm.employee.default"
-                flex="50"
-                format="DD/MM/YYYY"
-                no-floating-label="true"
-                week-start-day="Monday"
-                custom-to-home="true"
-                on-range-select="vm.dayofPaySelected(range)">
-        </sm-range-picker-input>
-    </div>
+  <h2 class="md-title">Demo For Default Date Range Picker</h2>
+  <div layout="row">
+    <sm-range-picker-input
+      fname="Date of Pay"
+      label="Date of Pay"
+      close-on-select="true"
+      form="test"
+      ng-model="vm.employee.default"
+      flex="50"
+      format="DD/MM/YYYY"
+      no-floating-label="true"
+      week-start-day="Monday"
+      custom-to-home="true"
+      on-range-select="vm.dayofPaySelected(range)"
+    >
+    </sm-range-picker-input>
+  </div>
 </form>

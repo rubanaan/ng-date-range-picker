@@ -1,178 +1,192 @@
-var picker = angular.module('ngDateRangePicker', []);
+let picker = angular.module("ngDateRangePicker", []);
 
-picker.provider('pickerProvider',
-    function ()
+picker.provider("pickerProvider", function () {
+  let massagePath = "X";
+  let cancelLabel = "Sluiten";
+  let okLabel = "Opslaan";
+
+  let customHeader = {
+    date: "ddd, MMM DD",
+    dateTime: "ddd, MMM DD HH:mm",
+    time: "HH:mm",
+  };
+
+  let daysNames = [
+    { single: "Z", shortName: "Zo", fullName: "Zondag" },
+    { single: "M", shortName: "Ma", fullName: "Maandag" },
+    { single: "D", shortName: "Di", fullName: "Dinsdag" },
+    { single: "W", shortName: "Wo", fullName: "Woensdag" },
+    { single: "D", shortName: "Do", fullName: "Donderdag" },
+    { single: "V", shortName: "Vr", fullName: "Vrijdag" },
+    { single: "Z", shortName: "Za", fullName: "Zaterdag" },
+  ];
+
+  let dayHeader = "shortName";
+
+  let monthNames = [
+    "Januari",
+    "Februari",
+    "Maart",
+    "April",
+    "Mei",
+    "Juni",
+    "Juli",
+    "Augustus",
+    "September",
+    "Oktober",
+    "November",
+    "December",
+  ];
+
+  let shortMonthNames = [
+    "Jan",
+    "Feb",
+    "Mrt",
+    "Apr",
+    "Mei",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Okt",
+    "Nov",
+    "Dec",
+  ];
+
+  let rangeDivider = "-";
+
+  let rangeDefaultList = [
     {
-        var massagePath = "X";
-        var cancelLabel = "Sluiten";
-        var okLabel     = "Opslaan";
+      label: monthNames[moment().month()] + ", " + moment().format("YYYY"),
+      startDate: moment().startOf("month"),
+      endDate: moment().endOf("month"),
+    },
+    {
+      label:
+        monthNames[moment().subtract(1, "month").month()] +
+        ", " +
+        moment().subtract(1, "month").format("YYYY"),
+      startDate: moment().subtract(1, "month").startOf("month"),
+      endDate: moment().subtract(1, "month").endOf("month"),
+    },
+    {
+      label:
+        monthNames[moment().subtract(2, "month").month()] +
+        ", " +
+        moment().subtract(2, "month").format("YYYY"),
+      startDate: moment().subtract(2, "month").startOf("month"),
+      endDate: moment().subtract(2, "month").endOf("month"),
+    },
+    {},
+    {
+      label: "Dit kwartaal (Q" + moment().quarter() + ")",
+      startDate: moment().startOf("quarter"),
+      endDate: moment().endOf("quarter"),
+    },
+    {
+      label:
+        "Vorig kwartaal (Q" + moment().subtract(3, "month").quarter() + ")",
+      startDate: moment().subtract(3, "month").startOf("quarter"),
+      endDate: moment().subtract(3, "month").endOf("quarter"),
+    },
+    {},
+    {
+      label: "Dit jaar (" + moment().format("YYYY") + ")",
+      startDate: moment().startOf("year"),
+      endDate: moment().endOf("year"),
+    },
+    {
+      label: "Vorig jaar (" + moment().subtract(1, "year").format("YYYY") + ")",
+      startDate: moment().subtract(1, "year").startOf("year"),
+      endDate: moment().subtract(1, "year").endOf("year"),
+    },
+  ];
 
-        var customHeader = {
-            date:     'ddd, MMM DD',
-            dateTime: 'ddd, MMM DD HH:mm',
-            time:     'HH:mm'
-        };
+  let rangeCustomStartEnd = ["Begin datum", "Eind datum"];
 
-        //date picker configuration
-        var daysNames = [
-            {'single': 'Z', 'shortName': 'Zo', 'fullName': 'Zondag'},
-            {'single': 'M', 'shortName': 'Ma', 'fullName': 'Maandag'},
-            {'single': 'D', 'shortName': 'Di', 'fullName': 'Dinsdag'},
-            {'single': 'W', 'shortName': 'Wo', 'fullName': 'Woensdag'},
-            {'single': 'D', 'shortName': 'Do', 'fullName': 'Donderdag'},
-            {'single': 'V', 'shortName': 'Vr', 'fullName': 'Vrijdag'},
-            {'single': 'Z', 'shortName': 'Za', 'fullName': 'Zaterdag'}
-        ];
-        var dayHeader       = "shortName";
-        var monthNames      = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
-        var shortMonthNames = ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+  let startDate = rangeDefaultList[0].startDate;
+  let endDate = rangeDefaultList[0].endDate;
 
-        //range picker configuration
-        var rangeDivider = '-';
+  return {
+    setMassagePath: function (param) {
+      massagePath = param;
+    },
 
-        var rangeDefaultList = [
-            {
-                label: monthNames[moment().month()] + ', ' + moment().format('YYYY'),
-                startDate: moment().startOf('month'),
-                endDate: moment().endOf('month')
-            },
-            {
-                label: monthNames[moment().subtract(1, 'month').month()] + ', ' + moment().subtract(1, 'month').format('YYYY'),
-                startDate: moment().subtract(1, 'month').startOf('month'),
-                endDate: moment().subtract(1, 'month').endOf('month')
-            },
-            {
-                label: monthNames[moment().subtract(2, 'month').month()] + ', ' + moment().subtract(2, 'month').format('YYYY'),
-                startDate: moment().subtract(2, 'month').startOf('month'),
-                endDate: moment().subtract(2, 'month').endOf('month')
-            },
-            {},
-            {
-                label: 'Dit kwartaal (Q' + moment().quarter() + ')',
-                startDate: moment().startOf('quarter'),
-                endDate: moment().endOf('quarter')
-            },
-            {
-                label: 'Vorig kwartaal (Q' + moment().subtract(3, 'month').quarter() + ')',
-                startDate: moment().subtract(3, 'month').startOf('quarter'),
-                endDate: moment().subtract(3, 'month').endOf('quarter')
-            },
-            {},
-            {
-                label: 'Dit jaar (' + moment().format('YYYY') + ')',
-                startDate: moment().startOf('year'),
-                endDate: moment().endOf('year')
-            },
-            {
-                label: 'Vorig jaar (' + moment().subtract(1, 'year').format('YYYY') + ')',
-                startDate: moment().subtract(1, 'year').startOf('year'),
-                endDate: moment().subtract(1, 'year').endOf('year')
-            }
-        ];
+    setDivider: function (value) {
+      rangeDivider = value;
+    },
 
-        var rangeCustomStartEnd = ['Begin datum', 'Eind datum'];
+    setDaysNames: function (array) {
+      daysNames = array;
+    },
 
-        var startDate = rangeDefaultList[0].startDate;
-        var endDate   = rangeDefaultList[0].endDate;
+    setMonthNames: function (array) {
+      monthNames = array;
+    },
 
-        return {
-            setMassagePath: function (param)
-            {
-                massagePath = param;
-            },
+    setShortMonthNames: function (array) {
+      shortMonthNames = array;
+    },
 
-            setDivider: function (value)
-            {
-                rangeDivider = value;
-            },
+    setDayHeader: function (param) {
+      dayHeader = param;
+    },
 
-            setDaysNames: function (array)
-            {
-                daysNames = array;
-            },
+    setOkLabel: function (param) {
+      okLabel = param;
+    },
 
-            setMonthNames: function (array)
-            {
-                monthNames = array;
-            },
+    setCancelLabel: function (param) {
+      cancelLabel = param;
+    },
 
-            setShortMonthNames: function (array)
-            {
-                shortMonthNames = array;
-            },
+    setRangeDefaultList: function (array) {
+      rangeDefaultList = array;
+    },
 
-            setDayHeader: function (param)
-            {
-                dayHeader = param;
-            },
+    setRangeCustomStartEnd: function (array) {
+      rangeCustomStartEnd = array;
+    },
 
-            setOkLabel: function (param)
-            {
-                okLabel = param;
-            },
+    setStartDate: function (param) {
+      startDate = param;
+    },
 
-            setCancelLabel: function (param)
-            {
-                cancelLabel = param;
-            },
+    setEndDate: function (param) {
+      endDate = param;
+    },
 
-            setRangeDefaultList: function (array)
-            {
-                rangeDefaultList = array;
-            },
+    setCustomHeader: function (obj) {
+      if (!angular.isUndefined(obj.date)) {
+        customHeader.date = obj.date;
+      }
+      if (!angular.isUndefined(obj.dateTime)) {
+        customHeader.dateTime = obj.dateTime;
+      }
+      if (!angular.isUndefined(obj.time)) {
+        customHeader.time = obj.time;
+      }
+    },
 
-            setRangeCustomStartEnd: function (array)
-            {
-                rangeCustomStartEnd = array;
-            },
+    $get: function () {
+      return {
+        startDate: startDate,
+        endDate: endDate,
 
-            setStartDate: function (param)
-            {
-                startDate = param
-            },
+        massagePath: massagePath,
+        cancelLabel: cancelLabel,
+        okLabel: okLabel,
 
-            setEndDate: function (param)
-            {
-                endDate = param
-            },
+        daysNames: daysNames,
+        monthNames: monthNames,
+        shortMonthNames: shortMonthNames,
+        dayHeader: dayHeader,
+        customHeader: customHeader,
 
-            setCustomHeader: function (obj)
-            {
-                if (!angular.isUndefined(obj.date))
-                {
-                    customHeader.date = obj.date;
-                }
-                if (!angular.isUndefined(obj.dateTime))
-                {
-                    customHeader.dateTime = obj.dateTime;
-                }
-                if (!angular.isUndefined(obj.time))
-                {
-                    customHeader.time = obj.time;
-                }
-            },
-
-            $get: function ()
-            {
-                return {
-                    startDate: startDate,
-                    endDate: endDate,
-
-                    massagePath: massagePath,
-                    cancelLabel: cancelLabel,
-                    okLabel: okLabel,
-
-                    daysNames: daysNames,
-                    monthNames: monthNames,
-                    shortMonthNames: shortMonthNames,
-                    dayHeader: dayHeader,
-                    customHeader: customHeader,
-
-                    rangeDivider: rangeDivider,
-                    rangeCustomStartEnd: rangeCustomStartEnd,
-                    rangeDefaultList: rangeDefaultList
-                }
-            }
-        }
-    }
-);
+        rangeDivider: rangeDivider,
+        rangeCustomStartEnd: rangeCustomStartEnd,
+        rangeDefaultList: rangeDefaultList,
+      };
+    },
+  };
+});

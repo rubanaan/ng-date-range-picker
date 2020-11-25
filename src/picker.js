@@ -1,80 +1,78 @@
 "use strict";
 
-var picker = angular.module('ngDateRangePicker', []);
-picker.provider('pickerProvider', function () {
+var picker = angular.module("ngDateRangePicker", []);
+picker.provider("pickerProvider", function () {
   var massagePath = "X";
   var cancelLabel = "Sluiten";
   var okLabel = "Opslaan";
   var customHeader = {
-    date: 'ddd, MMM DD',
-    dateTime: 'ddd, MMM DD HH:mm',
-    time: 'HH:mm'
-  }; //date picker configuration
-
+    date: "ddd, MMM DD",
+    dateTime: "ddd, MMM DD HH:mm",
+    time: "HH:mm"
+  };
   var daysNames = [{
-    'single': 'Z',
-    'shortName': 'Zo',
-    'fullName': 'Zondag'
+    single: "Z",
+    shortName: "Zo",
+    fullName: "Zondag"
   }, {
-    'single': 'M',
-    'shortName': 'Ma',
-    'fullName': 'Maandag'
+    single: "M",
+    shortName: "Ma",
+    fullName: "Maandag"
   }, {
-    'single': 'D',
-    'shortName': 'Di',
-    'fullName': 'Dinsdag'
+    single: "D",
+    shortName: "Di",
+    fullName: "Dinsdag"
   }, {
-    'single': 'W',
-    'shortName': 'Wo',
-    'fullName': 'Woensdag'
+    single: "W",
+    shortName: "Wo",
+    fullName: "Woensdag"
   }, {
-    'single': 'D',
-    'shortName': 'Do',
-    'fullName': 'Donderdag'
+    single: "D",
+    shortName: "Do",
+    fullName: "Donderdag"
   }, {
-    'single': 'V',
-    'shortName': 'Vr',
-    'fullName': 'Vrijdag'
+    single: "V",
+    shortName: "Vr",
+    fullName: "Vrijdag"
   }, {
-    'single': 'Z',
-    'shortName': 'Za',
-    'fullName': 'Zaterdag'
+    single: "Z",
+    shortName: "Za",
+    fullName: "Zaterdag"
   }];
   var dayHeader = "shortName";
-  var monthNames = ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'];
-  var shortMonthNames = ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec']; //range picker configuration
-
-  var rangeDivider = '-';
+  var monthNames = ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"];
+  var shortMonthNames = ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
+  var rangeDivider = "-";
   var rangeDefaultList = [{
-    label: monthNames[moment().month()] + ', ' + moment().format('YYYY'),
-    startDate: moment().startOf('month'),
-    endDate: moment().endOf('month')
+    label: monthNames[moment().month()] + ", " + moment().format("YYYY"),
+    startDate: moment().startOf("month"),
+    endDate: moment().endOf("month")
   }, {
-    label: monthNames[moment().subtract(1, 'month').month()] + ', ' + moment().subtract(1, 'month').format('YYYY'),
-    startDate: moment().subtract(1, 'month').startOf('month'),
-    endDate: moment().subtract(1, 'month').endOf('month')
+    label: monthNames[moment().subtract(1, "month").month()] + ", " + moment().subtract(1, "month").format("YYYY"),
+    startDate: moment().subtract(1, "month").startOf("month"),
+    endDate: moment().subtract(1, "month").endOf("month")
   }, {
-    label: monthNames[moment().subtract(2, 'month').month()] + ', ' + moment().subtract(2, 'month').format('YYYY'),
-    startDate: moment().subtract(2, 'month').startOf('month'),
-    endDate: moment().subtract(2, 'month').endOf('month')
+    label: monthNames[moment().subtract(2, "month").month()] + ", " + moment().subtract(2, "month").format("YYYY"),
+    startDate: moment().subtract(2, "month").startOf("month"),
+    endDate: moment().subtract(2, "month").endOf("month")
   }, {}, {
-    label: 'Dit kwartaal (Q' + moment().quarter() + ')',
-    startDate: moment().startOf('quarter'),
-    endDate: moment().endOf('quarter')
+    label: "Dit kwartaal (Q" + moment().quarter() + ")",
+    startDate: moment().startOf("quarter"),
+    endDate: moment().endOf("quarter")
   }, {
-    label: 'Vorig kwartaal (Q' + moment().subtract(3, 'month').quarter() + ')',
-    startDate: moment().subtract(3, 'month').startOf('quarter'),
-    endDate: moment().subtract(3, 'month').endOf('quarter')
+    label: "Vorig kwartaal (Q" + moment().subtract(3, "month").quarter() + ")",
+    startDate: moment().subtract(3, "month").startOf("quarter"),
+    endDate: moment().subtract(3, "month").endOf("quarter")
   }, {}, {
-    label: 'Dit jaar (' + moment().format('YYYY') + ')',
-    startDate: moment().startOf('year'),
-    endDate: moment().endOf('year')
+    label: "Dit jaar (" + moment().format("YYYY") + ")",
+    startDate: moment().startOf("year"),
+    endDate: moment().endOf("year")
   }, {
-    label: 'Vorig jaar (' + moment().subtract(1, 'year').format('YYYY') + ')',
-    startDate: moment().subtract(1, 'year').startOf('year'),
-    endDate: moment().subtract(1, 'year').endOf('year')
+    label: "Vorig jaar (" + moment().subtract(1, "year").format("YYYY") + ")",
+    startDate: moment().subtract(1, "year").startOf("year"),
+    endDate: moment().subtract(1, "year").endOf("year")
   }];
-  var rangeCustomStartEnd = ['Begin datum', 'Eind datum'];
+  var rangeCustomStartEnd = ["Begin datum", "Eind datum"];
   var startDate = rangeDefaultList[0].startDate;
   var endDate = rangeDefaultList[0].endDate;
   return {
@@ -146,30 +144,16 @@ picker.provider('pickerProvider', function () {
     }
   };
 });
-picker.service('pickerService', function () {
-  //-- private variables
-  var self = this,
-      callbacks = {}; //-- public methods
-
+picker.service("pickerService", function () {
+  var self = this;
+  var callbacks = {};
   self.registerCallback = registerCallback;
   self.executeCallback = executeCallback;
   self.getDate = getDate;
-  /**
-   * Sets a callback.
-   * @param name
-   * @param callback
-   */
 
   function registerCallback(name, callback) {
     callbacks[name] = callback;
   }
-  /**
-   * Do a callback.
-   * @param name
-   * @param first
-   * @param second
-   */
-
 
   function executeCallback(name, first, second) {
     if (angular.isFunction(callbacks[name])) {
@@ -178,12 +162,6 @@ picker.service('pickerService', function () {
       callbacks[name].apply(null, args);
     }
   }
-  /**
-   *
-   * @param date
-   * @returns {*}
-   */
-
 
   function getDate(date) {
     if (!date) {
@@ -201,16 +179,14 @@ picker.service('pickerService', function () {
     return null;
   }
 });
-picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout', '$mdMedia', 'pickerProvider', 'pickerService', function ($rootScope, $scope, $timeout, $mdMedia, pickerProvider, pickerService) {
-  //-- private variables
-  var self = this; //-- public variables
-
+picker.controller("calendarDateController", ["$scope", "$timeout", "$mdMedia", "pickerProvider", "pickerService", function ($scope, $timeout, $mdMedia, pickerProvider, pickerService) {
+  var self = this;
   self.customId = $scope.customId;
   self.dayHeader = pickerProvider.dayHeader;
   self.initialDate = $scope.initialDate;
-  self.viewModeSmall = $mdMedia('xs');
-  self.startDay = angular.isUndefined($scope.weekStartDay) || $scope.weekStartDay === '' ? 'Sunday' : $scope.weekStartDay;
-  self.mode = angular.isUndefined($scope.mode) ? 'DATE' : $scope.mode;
+  self.viewModeSmall = $mdMedia("xs");
+  self.startDay = angular.isUndefined($scope.weekStartDay) || $scope.weekStartDay === "" ? "Sunday" : $scope.weekStartDay;
+  self.mode = angular.isUndefined($scope.mode) ? "DATE" : $scope.mode;
   self.format = $scope.format;
   self.minDate = $scope.minDate || null;
   self.maxDate = $scope.maxDate || null;
@@ -224,13 +200,12 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
   self.dateCells = [];
   self.monthList = pickerProvider.shortMonthNames;
   self.fullMonthList = pickerProvider.monthNames;
-  self.moveCalenderAnimation = '';
+  self.moveCalenderAnimation = "";
   self.rangePickType = $scope.rangePickType || null;
-  self.format = angular.isUndefined(self.format) ? 'MM-DD-YYYY' : self.format;
+  self.format = angular.isUndefined(self.format) ? "MM-DD-YYYY" : self.format;
   self.currentDate = self.initialDate ? self.initialDate.clone() : null;
   self.initialDate = self.initialDate ? self.initialDate.clone() : moment();
-  self.startDate = self.currentDate || pickerProvider.startDate.clone(); //-- public methods
-
+  self.startDate = self.currentDate || pickerProvider.startDate.clone();
   self.setInitDate = setInitDate;
   self.selectDate = selectDate;
   self.checkRange = checkRange;
@@ -241,12 +216,8 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
   self.setHour = setHour;
   self.selectedDateTime = selectedDateTime;
   self.closeDateTime = closeDateTime;
-  return init();
-  /**
-   * Initialize the controller, setup watchers, gather elements
-   */
 
-  function init() {
+  (function init() {
     if (self.restrictToMinDate) {
       self.minDate = moment(self.minDate, self.format);
     }
@@ -255,15 +226,15 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
       self.maxDate = moment(self.maxDate, self.format);
     }
 
-    if (self.rangePickType === 'startDate') {
-      pickerService.registerCallback(self.customId + ':calendar:changeDate', function (date) {
+    if (self.rangePickType === "startDate") {
+      pickerService.registerCallback(self.customId + ":calendar:changeDate", function (date) {
         self.initialDate = date.startDate ? date.startDate.clone() : moment();
         self.startDate = date.startDate ? date.startDate.clone() : pickerProvider.startDate.clone();
         self.endDate = date.endDate ? date.endDate.clone() : pickerProvider.endDate.clone();
         buildDateCells();
         changeActiveState();
-      }); //self.endDate = pickerProvider.endDate ? pickerProvider.endDate.clone() : null;
-    } else if (self.rangePickType === 'endDate') {}
+      });
+    }
 
     self.yearItems = {
       currentIndex_: 0,
@@ -285,28 +256,28 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
     buildMonthCells();
     setView();
     showYear();
-  }
+  })();
 
   function setInitDate(date) {
     self.initialDate = angular.isUndefined(date) ? moment() : moment(date, self.format);
   }
 
   function setView() {
-    self.headerDispalyFormat = "ddd, MMM DD";
+    self.headerDisplayFormat = "ddd, MMM DD";
 
     switch (self.mode) {
-      case 'date-time':
-        self.view = 'DATE';
-        self.headerDispalyFormat = "ddd, MMM DD HH:mm";
+      case "date-time":
+        self.view = "DATE";
+        self.headerDisplayFormat = "ddd, MMM DD HH:mm";
         break;
 
-      case 'time':
-        self.view = 'HOUR';
-        self.headerDispalyFormat = "HH:mm";
+      case "time":
+        self.view = "HOUR";
+        self.headerDisplayFormat = "HH:mm";
         break;
 
       default:
-        self.view = 'DATE';
+        self.view = "DATE";
     }
   }
 
@@ -331,11 +302,11 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
       keys.push(key);
     }
 
-    var startIndex = moment().day(self.startDay).day(),
-        count = 0;
+    var startIndex = moment().day(self.startDay).day();
+    var count = 0;
 
-    for (var key in daysByName) {
-      if (!daysByName.hasOwnProperty(key)) {
+    for (var _key in daysByName) {
+      if (!daysByName.hasOwnProperty(_key)) {
         continue;
       }
 
@@ -349,10 +320,6 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
     var calStartDate = self.initialDate.clone().date(0).day(self.startDay);
     var weekend = false;
     var isDisabledDate = false;
-    /*
-     Check if min date is greater than first date of month
-     if true than set stopScrollPrevious=true
-     */
 
     if (self.minDate) {
       self.stopScrollPrevious = self.minDate.unix() > calStartDate.unix();
@@ -379,28 +346,23 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
           date: calStartDate.clone(),
           dayNum: isCurrentMonth ? calStartDate.date() : "",
           month: calStartDate.month(),
-          today: calStartDate.isSame(moment(), 'day'),
+          today: calStartDate.isSame(moment(), "day"),
           active: isDisabledDate ? false : isActive(calStartDate),
           start: isDisabledDate ? false : isStart(calStartDate),
           end: isDisabledDate ? false : isEnd(calStartDate),
           range: isDisabledDate ? false : isInRange(calStartDate),
           year: calStartDate.year(),
-          dayName: calStartDate.format('dddd'),
+          dayName: calStartDate.format("dddd"),
           isWeekEnd: weekend,
           isDisabledDate: isDisabledDate,
           isCurrentMonth: isCurrentMonth
         };
         week.push(day);
-        calStartDate.add(1, 'd');
+        calStartDate.add(1, "d");
       }
 
       self.dateCells.push(week);
     }
-    /*
-     Check if max date is greater than first date of month
-     if true than set stopScrollPrevious=true
-     */
-
 
     if (self.restrictToMaxDate && !angular.isUndefined(self.maxDate)) {
       self.stopScrollNext = self.maxDate.unix() < calStartDate.unix();
@@ -412,25 +374,25 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
   }
 
   function changePeriod(c) {
-    if (c === 'p') {
+    if (c === "p") {
       if (self.stopScrollPrevious) {
         return;
       }
 
-      self.moveCalenderAnimation = 'slideLeft';
-      self.initialDate.subtract(1, 'M');
+      self.moveCalenderAnimation = "slideLeft";
+      self.initialDate.subtract(1, "M");
     } else {
       if (self.stopScrollNext) {
         return;
       }
 
-      self.moveCalenderAnimation = 'slideRight';
-      self.initialDate.add(1, 'M');
+      self.moveCalenderAnimation = "slideRight";
+      self.initialDate.add(1, "M");
     }
 
     buildDateCells();
     $timeout(function () {
-      self.moveCalenderAnimation = '';
+      self.moveCalenderAnimation = "";
     }, 500);
   }
 
@@ -438,7 +400,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
     if (self.disableYearSelection) {
       return false;
     } else {
-      if (view === 'YEAR_MONTH') {
+      if (view === "YEAR_MONTH") {
         showYear();
       }
 
@@ -449,7 +411,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
   function changeYear(year, month) {
     self.initialDate.year(year).month(month);
     buildDateCells();
-    self.view = 'DATE';
+    self.view = "DATE";
   }
 
   function setHour(hour) {
@@ -461,23 +423,23 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
   }
 
   function selectedDateTime() {
-    if (self.mode === 'time') {
-      self.view = 'HOUR';
+    if (self.mode === "time") {
+      self.view = "HOUR";
     } else {
-      self.view = 'DATE';
+      self.view = "DATE";
     }
 
-    pickerService.executeCallback(self.customId + ':calendar:close');
+    pickerService.executeCallback(self.customId + ":calendar:close");
   }
 
   function closeDateTime() {
-    if (self.mode === 'time') {
-      self.view = 'HOUR';
+    if (self.mode === "time") {
+      self.view = "HOUR";
     } else {
-      self.view = 'DATE';
+      self.view = "DATE";
     }
 
-    pickerService.executeCallback(self.customId + ':calendar:close');
+    pickerService.executeCallback(self.customId + ":calendar:close");
   }
 
   function checkRange(date) {
@@ -487,8 +449,8 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
           continue;
         }
 
-        self.dateCells[i][j].range = self.dateCells[i][j].date.isBetween(self.startDate, date, 'day');
-        self.dateCells[i][j].end = self.dateCells[i][j].date.isSame(date, 'day');
+        self.dateCells[i][j].range = self.dateCells[i][j].date.isBetween(self.startDate, date, "day");
+        self.dateCells[i][j].end = self.dateCells[i][j].date.isSame(date, "day");
       }
     }
   }
@@ -498,13 +460,13 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
       return;
     }
 
-    if (self.rangePickType && self.rangePickType === 'startDate') {
+    if (self.rangePickType && self.rangePickType === "startDate") {
       self.startDate = date;
       self.endDate = null;
-      pickerService.executeCallback(self.customId + ':rangePicker:startDateSelected', date);
-    } else if (self.rangePickType && self.rangePickType === 'endDate') {
+      pickerService.executeCallback(self.customId + ":rangePicker:startDateSelected", date);
+    } else if (self.rangePickType && self.rangePickType === "endDate") {
       self.endDate = date;
-      pickerService.executeCallback(self.customId + ':rangePicker:endDateSelected', date);
+      pickerService.executeCallback(self.customId + ":rangePicker:endDateSelected", date);
     } else {
       self.currentDate = date;
     }
@@ -525,7 +487,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
 
   function isActive(date) {
     if (self.currentDate) {
-      if (date && self.currentDate.isSame(date, 'day')) {
+      if (date && self.currentDate.isSame(date, "day")) {
         return true;
       }
     }
@@ -535,7 +497,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
 
   function isStart(date) {
     if (self.rangePickType) {
-      if (self.startDate && date && self.startDate.isSame(date, 'day')) {
+      if (self.startDate && date && self.startDate.isSame(date, "day")) {
         return true;
       }
     }
@@ -545,7 +507,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
 
   function isEnd(date) {
     if (self.rangePickType) {
-      if (self.endDate && date && self.endDate.isSame(date, 'day')) {
+      if (self.endDate && date && self.endDate.isSame(date, "day")) {
         return true;
       }
     }
@@ -555,7 +517,7 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
 
   function isInRange(date) {
     if (self.rangePickType) {
-      if (self.endDate && self.startDate && date && date.isBetween(self.startDate, self.endDate, 'day')) {
+      if (self.endDate && self.startDate && date && date.isBetween(self.startDate, self.endDate, "day")) {
         return true;
       }
     }
@@ -563,65 +525,55 @@ picker.controller('calendarDateController', ['$rootScope', '$scope', '$timeout',
     return false;
   }
 }]);
-picker.directive('calendarDate', function () {
+picker.directive("calendarDate", function () {
   return {
-    restrict: 'E',
+    restrict: "E",
     replace: false,
-    require: ['^ngModel', 'calendarDate'],
+    require: ["^ngModel", "calendarDate"],
     scope: {
-      customId: '@',
-      rangePickType: '@',
+      customId: "@",
+      rangePickType: "@",
       minDate: "=",
       maxDate: "=",
       initialDate: "=",
-      format: '@',
-      mode: '@',
-      startView: '@',
-      weekStartDay: '@',
-      disableYearSelection: '@'
+      format: "@",
+      mode: "@",
+      startView: "@",
+      weekStartDay: "@",
+      disableYearSelection: "@"
     },
-    controller: 'calendarDateController',
-    controllerAs: 'vm',
+    controller: "calendarDateController",
+    controllerAs: "vm",
     templateUrl: "picker/calender-date.html"
   };
 });
-picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService', 'pickerProvider', function ($scope, $timeout, pickerService, pickerProvider) {
-  //-- private variables
-  var self = this; //-- public variables
-
+picker.controller("rangePickerController", ["$scope", "$timeout", "pickerService", "pickerProvider", function ($scope, $timeout, pickerService, pickerProvider) {
+  var self = this;
   self.customId = $scope.customId;
   self.clickedButton = 0;
-  self.startShowCustomSettting = self.showCustom;
+  self.startShowCustomSettings = self.showCustom;
   self.startDate = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
   self.endDate = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
   self.initialDate = self.startDate;
   self.closeOnSelect = !!$scope.closeOnSelect === true;
-  self.mode = angular.isUndefined($scope.mode) ? 'date' : $scope.mode;
-  self.format = angular.isUndefined($scope.format) ? 'DD/MM/YYYY' : $scope.format;
-  self.divider = $scope.divider || '-';
+  self.mode = angular.isUndefined($scope.mode) ? "date" : $scope.mode;
+  self.format = angular.isUndefined($scope.format) ? "DD/MM/YYYY" : $scope.format;
+  self.divider = $scope.divider || "-";
   self.okLabel = pickerProvider.okLabel;
   self.cancelLabel = pickerProvider.cancelLabel;
-  self.view = 'DATE';
+  self.view = "DATE";
   self.rangeCustomStartEnd = pickerProvider.rangeCustomStartEnd;
   self.rangeDefaultList = pickerProvider.rangeDefaultList;
-  self.selectedTabIndex = 0; //-- public methods
-
+  self.selectedTabIndex = 0;
   self.showCustomView = showCustomView;
-  self.dateRangeSelected = dateRangeSelected; //self.startTimeSelected = startTimeSelected;
-  //self.endTimeSelected   = endTimeSelected;
-
+  self.dateRangeSelected = dateRangeSelected;
   self.setRange = setRange;
-  self.cancel = cancel; //-- callbacks
+  self.cancel = cancel;
+  pickerService.registerCallback(self.customId + ":rangePicker:startDateSelected", startDateSelected);
+  pickerService.registerCallback(self.customId + ":rangePicker:endDateSelected", endDateSelected);
 
-  pickerService.registerCallback(self.customId + ':rangePicker:startDateSelected', startDateSelected);
-  pickerService.registerCallback(self.customId + ':rangePicker:endDateSelected', endDateSelected);
-  return init();
-  /**
-   * Initialize the controller, setup watchers, gather elements
-   */
-
-  function init() {
-    $scope.$watch('startDate', function (value) {
+  (function () {
+    $scope.$watch("startDate", function (value) {
       if (!value) {
         return;
       }
@@ -629,7 +581,7 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
       self.startDate = pickerService.getDate(value);
       changeDate(self.startDate, self.endDate, false);
     });
-    $scope.$watch('endDate', function (value) {
+    $scope.$watch("endDate", function (value) {
       if (!value) {
         return;
       }
@@ -641,13 +593,7 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
     $timeout(function () {
       changeDate(self.startDate, self.endDate, false);
     });
-  }
-  /**
-   * Check if the current list is active.
-   *
-   * @returns {boolean}
-   */
-
+  })();
 
   function checkListActive() {
     if (!self.startDate || !self.endDate) {
@@ -655,26 +601,22 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
     }
 
     for (var i = 0; i < self.rangeDefaultList.length; i++) {
-      if (self.rangeDefaultList[i].startDate === 'custom') {
+      if (self.rangeDefaultList[i].startDate === "custom") {
         continue;
       }
 
       self.rangeDefaultList[i].active = false;
 
-      if (self.startDate.isSame(self.rangeDefaultList[i].startDate, 'day') && self.endDate.isSame(self.rangeDefaultList[i].endDate, 'day')) {
+      if (self.startDate.isSame(self.rangeDefaultList[i].startDate, "day") && self.endDate.isSame(self.rangeDefaultList[i].endDate, "day")) {
         self.rangeDefaultList[i].active = true;
       }
     }
   }
-  /**
-   * Changes the view.
-   */
-
 
   function setNextView() {
     switch (self.mode) {
-      case 'date':
-        self.view = 'DATE';
+      case "date":
+        self.view = "DATE";
 
         if (self.selectedTabIndex === 0) {
           self.selectedTabIndex = 1;
@@ -682,11 +624,11 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
 
         break;
 
-      case 'date-time':
-        if (self.view === 'DATE') {
-          self.view = 'TIME';
+      case "date-time":
+        if (self.view === "DATE") {
+          self.view = "TIME";
         } else {
-          self.view = 'DATE';
+          self.view = "DATE";
 
           if (self.selectedTabIndex === 0) {
             self.selectedTabIndex = 1;
@@ -696,7 +638,7 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
         break;
 
       default:
-        self.view = 'DATE';
+        self.view = "DATE";
 
         if (self.selectedTabIndex === 0) {
           self.selectedTabIndex = 1;
@@ -704,75 +646,39 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
 
     }
   }
-  /**
-   * Shows the custom view.
-   */
-
 
   function showCustomView() {
     self.showCustom = true;
     self.selectedTabIndex = 0;
   }
-  /**
-   * On range selected.
-   */
-
 
   function dateRangeSelected() {
     self.selectedTabIndex = 0;
-    self.view = 'DATE';
-    self.showCustom = !!self.startShowCustomSettting;
+    self.view = "DATE";
+    self.showCustom = !!self.startShowCustomSettings;
     changeDate(self.startDate, self.endDate);
   }
-  /**
-   * On start date selected.
-   *
-   * @param date
-   */
-
 
   function startDateSelected(date) {
     self.startDate = pickerService.getDate(date);
     setNextView();
   }
-  /**
-   * On end date selected.
-   *
-   * @param date
-   * @param update
-   */
-
 
   function endDateSelected(date, update) {
     self.endDate = pickerService.getDate(date);
 
-    if (self.closeOnSelect && self.mode === 'date') {
+    if (self.closeOnSelect && self.mode === "date") {
       changeDate(self.startDate, self.endDate, update);
     } else {
       setNextView();
     }
   }
-  /**
-   * Sets the range.
-   *
-   * @param startDate
-   * @param endDate
-   */
-
 
   function setRange(startDate, endDate) {
     self.startDate = startDate;
     self.endDate = endDate;
     changeDate(self.startDate, self.endDate);
   }
-  /**
-   * Changes the date.
-   *
-   * @param startDate
-   * @param endDate
-   * @param update
-   */
-
 
   function changeDate(startDate, endDate, update) {
     var range = {
@@ -783,87 +689,75 @@ picker.controller('rangePickerController', ['$scope', '$timeout', 'pickerService
     self.view = "DATE";
 
     if (angular.isUndefined(update) || update === true) {
-      pickerService.executeCallback(self.customId + ':rangePicker:close', range);
+      pickerService.executeCallback(self.customId + ":rangePicker:close", range);
     }
 
-    pickerService.executeCallback(self.customId + ':calendar:changeDate', range);
+    pickerService.executeCallback(self.customId + ":calendar:changeDate", range);
     checkListActive();
   }
-  /**
-   * Closes the rangepicker.
-   */
-
 
   function cancel() {
     self.selectedTabIndex = 0;
     self.showCustom = false;
-    pickerService.executeCallback(self.customId + ':rangePicker:close');
+    pickerService.executeCallback(self.customId + ":rangePicker:close");
   }
 }]);
-picker.directive('rangePicker', function () {
+picker.directive("rangePicker", function () {
   return {
-    restrict: 'E',
-    require: ['^?ngModel', 'rangePicker'],
+    restrict: "E",
+    require: ["^?ngModel", "rangePicker"],
     scope: {
-      customId: '@',
-      format: '@',
-      divider: '@',
-      weekStartDay: '@',
-      customToHome: '@',
-      closeOnSelect: '@',
-      mode: '@',
-      showCustom: '@',
-      customList: '=',
-      minDate: '@',
-      maxDate: '@',
-      startDate: '@',
-      endDate: '@'
+      customId: "@",
+      format: "@",
+      divider: "@",
+      weekStartDay: "@",
+      customToHome: "@",
+      closeOnSelect: "@",
+      mode: "@",
+      showCustom: "@",
+      customList: "=",
+      minDate: "@",
+      maxDate: "@",
+      startDate: "@",
+      endDate: "@"
     },
     terminal: true,
-    controller: 'rangePickerController',
-    controllerAs: 'vm',
+    controller: "rangePickerController",
+    controllerAs: "vm",
     bindToController: false,
-    templateUrl: 'picker/range-picker.html'
+    templateUrl: "picker/range-picker.html"
   };
 });
-picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element', '$mdUtil', '$mdMedia', '$document', 'pickerService', 'pickerProvider', function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerService, pickerProvider) {
-  //-- private variables
-  var self = this; //-- public variables
-
+picker.controller("rangePickerInputController", ["$scope", "$timeout", "$element", "$mdUtil", "$mdMedia", "$document", "pickerService", "pickerProvider", function ($scope, $timeout, $element, $mdUtil, $mdMedia, $document, pickerService, pickerProvider) {
+  var self = this;
   self.isCalenderOpen = false;
   self.calenderHeight = 460;
   self.calenderWidth = 296;
-  self.customId = $scope.customId || 'one';
-  self.inputPane = $element[0].querySelector('.sm-input-container');
-  self.calenderPane = $element[0].querySelector('.sm-calender-pane');
-  self.button = $element[0].querySelector('.sm-picker-icon');
+  self.customId = $scope.customId || "one";
+  self.inputPane = $element[0].querySelector(".sm-input-container");
+  self.calenderPane = $element[0].querySelector(".sm-calender-pane");
+  self.button = $element[0].querySelector(".sm-picker-icon");
   self.calenderPan = angular.element(self.calenderPane);
-  self.calenderPan.addClass('hide hide-animate');
-  self.mode = angular.isUndefined($scope.mode) ? 'date' : $scope.mode;
-  self.format = angular.isUndefined($scope.format) ? 'DD/MM/YYYY' : $scope.format;
-  self.divider = $scope.divider || '-';
+  self.calenderPan.addClass("hide hide-animate");
+  self.mode = angular.isUndefined($scope.mode) ? "date" : $scope.mode;
+  self.format = angular.isUndefined($scope.format) ? "DD/MM/YYYY" : $scope.format;
+  self.divider = $scope.divider || "-";
   self.disabled = $scope.disabled;
   self.startDate = $scope.startDate;
   self.endDate = $scope.endDate;
   self.onRangeSelect = angular.isFunction($scope.onRangeSelect) ? $scope.onRangeSelect : false;
   self.customList = $scope.customList || null;
   self.closeOnSelect = !!$scope.closeOnSelect === true;
-  self.bodyClickHandler = angular.bind(self, clickOutSideHandler); //-- public methods
-
+  self.bodyClickHandler = angular.bind(self, clickOutSideHandler);
   self.getVisibleViewPort = getVisibleViewPort;
   self.show = show;
   self.tabOutEvent = tabOutEvent;
   self.hideElement = hideElement;
-  self.clickOutSideHandler = clickOutSideHandler; //-- callbacks
+  self.clickOutSideHandler = clickOutSideHandler;
+  pickerService.registerCallback(self.customId + ":rangePicker:close", closePicker);
 
-  pickerService.registerCallback(self.customId + ':rangePicker:close', closePicker);
-  return init();
-  /**
-   * Initialize the controller, setup watchers, gather elements
-   */
-
-  function init() {
-    $scope.$watchGroup(['startDate', 'endDate'], function (newValues, oldValues, scope) {
+  (function () {
+    $scope.$watchGroup(["startDate", "endDate"], function (newValues, oldValues, scope) {
       var startDate = $scope.startDate ? pickerService.getDate($scope.startDate) : pickerProvider.startDate;
       var endDate = $scope.endDate ? pickerService.getDate($scope.endDate) : pickerProvider.endDate;
       initInput({
@@ -876,13 +770,12 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
       pickerProvider.rangeDefaultList = self.customList;
     }
 
-    $scope.$on('$destroy', function () {
+    $scope.$on("$destroy", function () {
       if (self.calenderPane.parentNode) {
         self.calenderPane.parentNode.removeChild(self.calenderPane);
       }
-    }); // if tab out hide key board
-
-    angular.element(self.inputPane).on('keydown', function (e) {
+    });
+    angular.element(self.inputPane).on("keydown", function (e) {
       switch (e.which) {
         case 27:
         case 9:
@@ -890,25 +783,11 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
           break;
       }
     });
-  }
-  /**
-   * Initializes the input.
-   *
-   * @param date
-   */
-
+  })();
 
   function initInput(date) {
-    self.value = date.startDate.format(self.format) + ' ' + self.divider + ' ' + date.endDate.format(self.format);
+    self.value = date.startDate.format(self.format) + " " + self.divider + " " + date.endDate.format(self.format);
   }
-  /**
-   * Makes the viewport.
-   *
-   * @param elementRect
-   * @param bodyRect
-   * @returns {{top: (*|string|Window|Number), left: (*|string|Number)}}
-   */
-
 
   function getVisibleViewPort(elementRect, bodyRect) {
     var top = elementRect.top;
@@ -928,63 +807,47 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
       left: left
     };
   }
-  /**
-   * Shows the input.
-   *
-   * @param $event
-   */
-
 
   function show($event) {
     var elementRect = self.inputPane.getBoundingClientRect();
     var bodyRect = document.body.getBoundingClientRect();
-    self.calenderPan.removeClass('hide hide-animate');
+    self.calenderPan.removeClass("hide hide-animate");
 
-    if ($mdMedia('sm') || $mdMedia('xs')) {
-      self.calenderPane.style.left = (bodyRect.width - 320) / 2 + 'px';
-      self.calenderPane.style.top = (bodyRect.height - 450) / 2 + 'px';
+    if ($mdMedia("sm") || $mdMedia("xs")) {
+      self.calenderPane.style.left = (bodyRect.width - 320) / 2 + "px";
+      self.calenderPane.style.top = (bodyRect.height - 450) / 2 + "px";
     } else {
       var rect = getVisibleViewPort(elementRect, bodyRect);
-      self.calenderPane.style.left = rect.left + 'px';
-      self.calenderPane.style.top = rect.top + 'px';
+      self.calenderPane.style.left = rect.left + "px";
+      self.calenderPane.style.top = rect.top + "px";
     }
 
     document.body.appendChild(self.calenderPane);
     angular.element(self.calenderPane).focus();
-    self.calenderPan.addClass('show');
+    self.calenderPan.addClass("show");
     $mdUtil.disableScrollAround(self.calenderPane);
     self.isCalenderOpen = true;
     $timeout(function () {
-      $document.on('click', self.bodyClickHandler);
+      $document.on("click", self.bodyClickHandler);
     }, 200);
   }
-  /**
-   * On tab key, hide element.
-   *
-   * @param element
-   */
-
 
   function tabOutEvent(element) {
     if (element.which === 9) {
       hideElement();
     }
   }
-  /**
-   * Hides the element.
-   */
-
 
   function hideElement() {
-    self.calenderPan.addClass('hide-animate');
-    self.calenderPan.removeClass('show');
+    self.calenderPan.addClass("hide-animate");
+    self.calenderPan.removeClass("show");
     $mdUtil.enableScrolling();
 
     if (self.button) {
       angular.element(self.button).focus();
     }
 
-    $document.off('click');
+    $document.off("click");
     self.isCalenderOpen = false;
     $timeout(function () {
       if (self.isCalenderOpen === false) {
@@ -994,18 +857,12 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
       }
     });
   }
-  /**
-   * Closes the picker.
-   *
-   * @param date
-   */
-
 
   function closePicker(date) {
     var startDate = date.startDate ? pickerService.getDate(date.startDate) : pickerProvider.startDate;
     var endDate = date.endDate ? pickerService.getDate(date.endDate) : pickerProvider.endDate;
-    self.value = startDate.format(self.format) + ' ' + self.divider + ' ' + endDate.format(self.format);
-    $document.off('keydown');
+    self.value = startDate.format(self.format) + " " + self.divider + " " + endDate.format(self.format);
+    $document.off("keydown");
     hideElement();
 
     if (angular.isFunction(self.onRangeSelect)) {
@@ -1017,12 +874,6 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
       });
     }
   }
-  /**
-   * Click outside to close.
-   *
-   * @param e
-   */
-
 
   function clickOutSideHandler(e) {
     if (!self.button) {
@@ -1036,35 +887,35 @@ picker.controller('rangePickerInputController', ['$scope', '$timeout', '$element
     }
   }
 }]);
-picker.directive('rangePickerInput', function () {
+picker.directive("rangePickerInput", function () {
   return {
-    restrict: 'EA',
+    restrict: "EA",
     replace: true,
-    require: ['^ngModel'],
+    require: ["^ngModel"],
     scope: {
       fname: "@",
       customId: "@",
       label: "@",
-      isRequired: '@',
-      closeOnSelect: '@',
-      disabled: '=',
-      format: '@',
-      mode: '@',
-      divider: '@',
-      showCustom: '@',
+      isRequired: "@",
+      closeOnSelect: "@",
+      disabled: "=",
+      format: "@",
+      mode: "@",
+      divider: "@",
+      showCustom: "@",
       weekStartDay: "@",
       customToHome: "@",
-      customList: '=',
-      minDate: '@',
-      maxDate: '@',
-      startDate: '@',
-      endDate: '@',
-      onRangeSelect: '&'
+      customList: "=",
+      minDate: "@",
+      maxDate: "@",
+      startDate: "@",
+      endDate: "@",
+      onRangeSelect: "&"
     },
-    controller: 'rangePickerInputController',
-    controllerAs: 'vm',
+    controller: "rangePickerInputController",
+    controllerAs: "vm",
     bindToController: false,
-    templateUrl: 'picker/range-picker-input.html'
+    templateUrl: "picker/range-picker-input.html"
   };
 });
 angular.module('ngDateRangePicker').run(['$templateCache', function ($templateCache) {
